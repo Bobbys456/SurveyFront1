@@ -12,6 +12,9 @@ code {
     monospace;
 }
 
+
+/* login css below */ 
+
  #button{
   position: absolute;
   width: fit-content;
@@ -27,12 +30,7 @@ code {
   height: 100%;
 }
 
-@keyframes shake {
-  0% { margin-left: 0rem; }
-  25% { margin-left: 0.5rem; }
-  75% { margin-left: -0.5rem; }
-  100% { margin-left: 0rem; }
-}
+
 
 .true{
   display: block; /* Makes the input take up the full width of its container */
@@ -53,7 +51,7 @@ code {
 
 .false{
 
-  animation: shake 0.2s ease-in-out 0s 2;
+ 
   box-shadow: 0 0 0.5em red;
   
   display: block; /* Makes the input take up the full width of its container */
@@ -81,3 +79,4 @@ code {
   width: 27%;
   height: 4%;
 }
+
