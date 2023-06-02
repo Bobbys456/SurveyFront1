@@ -9,6 +9,7 @@ import axios from 'axios';
 
 export default function MyApp() {
 
+  const email = null; 
   const [verified, setVerify] = useState(false);
   const [valid, setValid] = useState(true);
   const [error, setError] = useState(null);
@@ -24,7 +25,7 @@ export default function MyApp() {
   } else {
     return (
     
-      <SurveyPage></SurveyPage>
+      <SurveyPage submitClick={submitClick}></SurveyPage>
 
    
     );
@@ -32,7 +33,25 @@ export default function MyApp() {
   
 
 
+  //handles sumbition of form
+  function submitClick(submission){
 
+    axios.get('http://localhost:5000/submit', {
+        params: {
+          data: submission,
+          email: email
+        }
+        }
+    ).then((response)=>{
+      
+      console.log(response.data);
+    
+    }).catch(function (error) {
+      console.log(error);
+    })
+
+  }  
+  
 
 
 
@@ -54,7 +73,6 @@ export default function MyApp() {
 
     const emailValue = emailInput.value;
     
-    
 
     if(emailValue.indexOf('@') < 0 || emailValue.indexOf('.') < 0 || emailValue.indexOf(' ') >= 0){
     
@@ -73,6 +91,7 @@ export default function MyApp() {
             logError('This email has already been used.'); 
         }else{
             validate(); 
+            email = emailValue; 
         }
         console.log(response.data);
       

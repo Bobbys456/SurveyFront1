@@ -1,63 +1,53 @@
 import React, { useState } from 'react';
+import Button from '@mui/material/Button';
 import './index.css';
 import './survey.css';
 
-export default function Page() {
+const questions = [
+  '1',
+  '2',
+  '3',
+  '4',
+  ['a','b','c','d'],
+  ['a','f','c','d'],
+  ['a','b','g','d'],
+  ['p','b','c','d'],
+];
+
+const mcquestions = [
+  
+];
+
+export default function Page(props) {
     // Declare a new state variable, which we'll call "count"
     const [count, setCount] = useState(0);
 
-    const questions = [
-      '1',
-      '2',
-      '3',
-      '4',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'Would you recommend our service to others?',
-      'What features would you like to see in future updates?',
-      'How would you rate the overall user experience?',
-      'last q \n bruh <br>sdkjfskadjf'
-    ];
+    
     
     
     return (
         <div id="box">
           
-          // Spacer
-          <h2></h2>
+          <div class='banner'>
+            <h1>Survey</h1>
+          </div>
 
-          <div class='sQuestionContainer'>
-            {questions.map((question,index) => (
-            <Question q={question} id={"q"+index}></Question>
-            ))}
+          <div id='sQuestionContainer' class='sQuestionContainer'>
+            {questions.map(function writeq(question,index){
+              if(index > 3){
+                return <MCQuestion q={question} key={index} id={"q"+index}></MCQuestion>
+              } else { 
+                return <TextQuestion q={question} key={index} id={"q"+index}></TextQuestion>
+              }
+              
+            })}
+              
+            
+            
+            
+           
+            
+            <Button onClick={()=>props.submitClick(getAnswers())} id='button' variant="contained">submit</Button>
           </div>
         
         </div>
@@ -65,13 +55,68 @@ export default function Page() {
 
 }
 
-function Question(props){
+//returns all question answers as an array 
+function getAnswers(){
+  const ans = Array(document.getElementById("sQuestionContainer").childElementCount)
+  for (let i = 0; i < document.getElementById("sQuestionContainer").childElementCount -1; i++) {
+   
+    
+    ans[i] = document.getElementById('q' + i).value
+    
+    
+    console.log('loop succ')
+   
+  }
+  
+  return ans;
+}
+
+
+//temp holding for if else answer retrieval 
+/*
+function getAnswers(){
+  const ans = Array(document.getElementById("sQuestionContainer").childElementCount)
+  for (let i = 0; i < document.getElementById("sQuestionContainer").childElementCount; i++) {
+    if(document.getElementById('q' + i).tagName.type === 'text'){
+      ans[i] = document.getElementById('q' + i).value
+    }
+    if(document.getElementById('q' + i).tagName.type === 'radio'){
+      ans[i] = document.getElementById('q' + i).value
+    }
+
+  }
+  
+  return ans;
+}
+*/
+
+function MCQuestion(props){
   return(
     <div class='padder'>
       <div class='sQuestionOutline'>
         {props.q}
         {"    " + props.id}
-        <input class='texAnswer' id={props.id} type= "text"></input>
+
+        {props.q.map((question,index) => (
+            <><input type="radio" key={index} id={props.id} name={props.id} value={props.q[index]}></input><label class='lab' for={props.q[index]}>{props.q[index]}</label></>
+            ))
+        }
+     
+        
+        
+        
+      </div>
+    </div>
+  )
+}
+
+function TextQuestion(props){
+  return(
+    <div class='padder'>
+      <div class='sQuestionOutline'>
+        {props.q}
+        {"    " + props.id}
+        <input class='texAnswer' placeholder="Enter your response here" id={props.id} type= "text"></input>
       </div>
     </div>
   )
