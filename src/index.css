@@ -80,3 +80,9 @@ code {
   height: 4%;
 }
 
+.spinner{
+  position:absolute;
+  left:50%;
+  top:50%
+}
+

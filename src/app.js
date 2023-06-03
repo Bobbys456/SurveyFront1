@@ -4,57 +4,68 @@ import './index.css';
 import LoginPage from './login.js';
 import SurveyPage from './survey';
 import axios from 'axios';
+import Loading from './loading'; 
 
 
+let questionSet;
+let questions; 
+let response;  
 
 export default function MyApp() {
 
-  const email = null; 
+  
+  let email = null; 
   const [verified, setVerify] = useState(false);
   const [valid, setValid] = useState(true);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false)
 
-  if(!verified){
-    return (
-      <>
+  if(loading)
+  {
+    return(
+      <Loading></Loading>
+    )
+  }else{
+    if(!verified){
+
+      return (
+
         <LoginPage error={error} valid={valid} verified={verified} loginClick={loginClick}></LoginPage>
-      </>
-      
-   
-    );
-  } else {
-    return (
-    
-      <SurveyPage submitClick={submitClick}></SurveyPage>
 
-   
-    );
+      );
+    } 
+    else{
+    
+      return( 
+        <SurveyPage questions={questionSet} submitClick={submitClick}></SurveyPage>
+      )
+
+    }
   }
   
+  
 
+  //gets questions for survey from the server 
+  async function questionReq(){
+      
+    response = await axios.get('http://localhost:5000/questions');
+    questions = Object.values(response.data); 
+    questionSet = questions; 
+    setLoading(false)
+
+  }
 
   //handles sumbition of form
-  function submitClick(submission){
+  async function submitClick(submission){
 
-    axios.get('http://localhost:5000/submit', {
+    let response = await axios.get('http://localhost:5000/submit', {
         params: {
           data: submission,
           email: email
         }
-        }
-    ).then((response)=>{
-      
-      console.log(response.data);
-    
-    }).catch(function (error) {
-      console.log(error);
-    })
-
+        })
   }  
   
-
-
-
 
   
  //this error methods sets the state to inclue error
@@ -69,9 +80,9 @@ export default function MyApp() {
   }
 
   //handler method ofr when the verify email button is clicked. Makes sure email syntax is correct on client and check emails for double use at the server
-  function loginClick(emailInput){
+  async function loginClick(emailInput){
 
-    const emailValue = emailInput.value;
+    let emailValue = emailInput.value;
     
 
     if(emailValue.indexOf('@') < 0 || emailValue.indexOf('.') < 0 || emailValue.indexOf(' ') >= 0){
@@ -80,25 +91,23 @@ export default function MyApp() {
     
     }else{
 
-      axios.get('http://localhost:5000/', {
+      response = await axios.get('http://localhost:5000/', {
           params: {
             email: emailValue
           }
           }
-      ).then((response)=>{
+      )
         
-        if(response.data === false){
-            logError('This email has already been used.'); 
-        }else{
-            validate(); 
-            email = emailValue; 
-        }
-        console.log(response.data);
+      if(response.data === false){
+          logError('This email has already been used.'); 
+      }else{
+          validate(); 
+          email = emailValue; 
+      }
       
-      }).catch(function (error) {
-        console.log(error);
-      })
- 
+      setLoading(true)
+      questionReq()
+
     }  
   }
 }

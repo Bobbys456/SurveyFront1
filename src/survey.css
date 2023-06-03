@@ -18,7 +18,7 @@
     width:80%;
     left:10%;
     overflow-y:auto;
-    background-color: rgba(8, 101, 177, 0.76);
+    background-color: rgba(86, 135, 175, 0.76);
 
     
     
@@ -58,9 +58,24 @@
     height: 4%;
   }
 
-  .lab{
-    display: inline-block;
-    width: 40%;
+
+  #sendSurvey{
+    position: fixed;
+    padding: 10px;
+    width:fit-content;
+    left:80%;
+    top:20%;
+  }
+
   
+  .lab{
+    position: relative;
+    width: 40%;
+  }
+
+  input[type="radio"] {
+    position: relative;
+    width: 10%;
+    padding-top: 100px;
   }
   
